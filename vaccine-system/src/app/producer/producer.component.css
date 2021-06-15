@@ -1,0 +1,40 @@
+#form-container {
+    margin-top: 7%;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 9px 9px 18px #666666, -9px -9px 18px #ffffff;
+}
+
+form {
+    padding: 15px;
+}
+
+h5 {
+    letter-spacing: 1.5px;
+    font-weight: lighter;
+    margin-top: -5px;
+}
+
+label {
+    float: left;
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+input {
+    margin-bottom: 30px;
+}
+
+.btn {
+    width: 120px;
+    font-size: larger;
+    margin-bottom: 30px;
+}
+
+div[role='alert'] {
+    margin-top: -26px;
+}
+
+.alert-warning{
+    margin-top: -26px;
+}

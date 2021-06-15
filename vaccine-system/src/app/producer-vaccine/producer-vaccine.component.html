@@ -1,0 +1,190 @@
+<div class="container text-center my-5">
+    <h1>Vaccines Stock</h1>
+    <h5>Hello {{ name }}, Here are your vaccines</h5>
+</div>
+<div class="row" id="display-all">
+    <div class="col-2"></div>
+    <div class="col" id="vaccines">
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th scope="col">Index</th>
+                    <th scope="col">Producer Name</th>
+                    <th scope="col">Vaccine Name</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Date of Expiry</th>
+                    <th scope="col">Update | Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vaccine of vaccines; index as i">
+                    <td scope="row">{{ i+1 }}</td>
+                    <td>{{ vaccine.producer_name }}</td>
+                    <td>{{ vaccine.vaccine_name }}</td>
+                    <td>{{ vaccine.stock }} </td>
+                    <td>{{ vaccine.expiry_date.slice(0,10) }}</td>
+                    <td><button class="btn btn-warning btn-sm" (click)="editVaccine(vaccine)"><svg
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="20" height="20">
+                                <path fill-rule="evenodd"
+                                    d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z">
+                                </path>
+                            </svg></button> | <button class="btn btn-danger btn-sm" (click)="deleteVaccine(vaccine)"><svg
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="20" height="20">
+                                <path fill-rule="evenodd"
+                                    d="M16 1.75V3h5.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H8V1.75C8 .784 8.784 0 9.75 0h4.5C15.216 0 16 .784 16 1.75zm-6.5 0a.25.25 0 01.25-.25h4.5a.25.25 0 01.25.25V3h-5V1.75z">
+                                </path>
+                                <path
+                                    d="M4.997 6.178a.75.75 0 10-1.493.144L4.916 20.92a1.75 1.75 0 001.742 1.58h10.684a1.75 1.75 0 001.742-1.581l1.413-14.597a.75.75 0 00-1.494-.144l-1.412 14.596a.25.25 0 01-.249.226H6.658a.25.25 0 01-.249-.226L4.997 6.178z">
+                                </path>
+                                <path
+                                    d="M9.206 7.501a.75.75 0 01.793.705l.5 8.5A.75.75 0 119 16.794l-.5-8.5a.75.75 0 01.705-.793zm6.293.793A.75.75 0 1014 8.206l-.5 8.5a.75.75 0 001.498.088l.5-8.5z">
+                                </path>
+                            </svg></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+<div class="row text-center" id="add-update">
+    <div class="col-1"></div>
+
+
+    <div class="col">
+        <h3>Add Vaccines</h3>
+        <h5>Your addition can change India</h5>
+        <form [formGroup]="form">
+            <div>
+                <label for="name">Producer name</label>
+                <input type="text" class="form-control" id="producer-name" formControlName="producer_name"
+                    placeholder="{{ name }}" value="{{ name }}" readonly>
+            </div>
+
+            <div>
+                <label for="vaccine-name">Vaccine Name</label>
+                <input type="text" class="form-control" id="vaccine-name" uppercase formControlName="vaccine_name">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="vaccine_name?.touched && !vaccine_name?.valid">
+                <div *ngIf="vaccine_name?.errors?.required">Vaccine Name needs to be entered</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(vaccine_name)"></button>
+            </div>
+
+
+            <div>
+                <label for="stock">Available Stock</label>
+                <input type="number" class="form-control" id="stock" formControlName="stock">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="stock?.touched && !stock?.valid">
+                <div *ngIf="stock?.errors?.required">Stock needs to be entered</div>
+                <div *ngIf="stock?.errors?.cannotBeNegative">Stock cannot be negative</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(stock)"></button>
+            </div>
+
+            <div>
+                <label for="expiry-date">Expiry Date</label>
+                <input type="date" class="form-control" id="expiry-date" formControlName="expiry_date">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="expiry_date?.touched && !expiry_date?.valid">
+                <div *ngIf="expiry_date?.errors?.required">Expiry Date needs to be entered</div>
+                <div *ngIf="expiry_date?.errors?.isDate">Expiry Date should be correct</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(expiry_date)"></button>
+            </div>
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <button class="btn btn-primary" (click)="postVaccine()" [disabled]="!form.valid"> Submit </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-danger" (click)="resetFields2()"> Clear </button>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="form.errors?.vaccinePresent">
+                <div>Vaccine is already present. Please update from list!</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="formOk()"></button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="col-1"></div>
+
+
+    <div class="col">
+        <h3>Update Vaccines</h3>
+        <h5>We hope the stocks are going up!</h5>
+        <form [formGroup]="formUpdate">
+            <div>
+                <input type="text" readonly hidden formControlName="_id">
+            </div>
+
+            <div>
+                <label for="name">Producer name</label>
+                <input type="text" class="form-control" id="producer-name" formControlName="producer_name"
+                    placeholder="{{ name }}" value="{{ name }}" readonly>
+            </div>
+
+            <div>
+                <label for="vaccine-name">Vaccine Name</label>
+                <input type="text" class="form-control" id="vaccine-name" uppercase formControlName="vaccine_name">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="vaccine_name2?.touched && !vaccine_name2?.valid">
+                <div *ngIf="vaccine_name2?.errors?.required">Vaccine Name needs to be entered</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(vaccine_name2)"></button>
+            </div>
+
+            <div>
+                <label for="stock">Available Stock</label>
+                <input type="number" class="form-control" id="stock" formControlName="stock">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="stock2?.touched && !stock2?.valid">
+                <div *ngIf="stock2?.errors?.required">Stock needs to be entered</div>
+                <div *ngIf="stock2?.errors?.cannotBeNegative">Stock cannot be negative</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(stock2)"></button>
+            </div>
+
+            <div>
+                <label for="expiry-date">Expiry Date</label>
+                <input type="date" class="form-control" id="expiry-date" formControlName="expiry_date">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="expiry_date2?.touched && !expiry_date2?.valid">
+                <div *ngIf="expiry_date2?.errors?.required">Expiry Date needs to be entered</div>
+                <div *ngIf="expiry_date2?.errors?.isDate">Expiry Date should be correct</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(expiry_date2)"></button>
+            </div>
+
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <button class="btn btn-primary" (click)="updateVaccine()" [disabled]="!formUpdate.valid"> Update
+                    </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-danger" (click)="resetFields()"> Clear </button>
+                </div>
+                <div class="col"></div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="col-1"></div>
+
+</div>

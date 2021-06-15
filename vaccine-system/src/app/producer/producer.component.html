@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col"></div>
+  <div class="col text-center" id="form-container">
+    &nbsp;
+    <h1>Producer SignUp</h1>
+    <h5>You are helping India take a step towards a <br> <b>Healthy Tomorrow</b></h5>
+    <form [formGroup]='form'>
+      <br>
+
+      <div>
+        <label for="username">Producer Name</label>
+        <input type="text" class="form-control" id="username" formControlName='producer_name'>
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert"
+        *ngIf="producer_name?.touched && !producer_name?.valid">
+        <div *ngIf="producer_name?.errors?.required">Name needs to be entered</div>
+        <div *ngIf="producer_name?.errors?.cannotContainSpace">Name cannot contain space</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+          (click)="dismiss(producer_name)"></button>
+      </div>
+
+      <div>
+        <label for="email">Producer Email</label>
+        <input type="text" class="form-control" id="email" formControlName="producer_email">
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert"
+        *ngIf="producer_email?.touched && !producer_email?.valid">
+        <div *ngIf="producer_email?.errors?.required">EmailId needs to be entered</div>
+        <div *ngIf="producer_email?.errors?.email">Please enter valid EmailId</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+          (click)="dismiss(producer_email)"></button>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" formControlName="password">
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert"
+        *ngIf="password?.touched && !password?.valid">
+        <div *ngIf="password?.errors?.required">Password needs to be entered</div>
+        <div *ngIf="password?.errors?.minLength">Password needs to be at least 8 letters</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+          (click)="dismiss(password)"></button>
+      </div>
+
+      <div>
+        <label for="id">Company ID</label>
+        <input type="text" class="form-control" id="id" formControlName="producer_id">
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert"
+        *ngIf="producer_id?.touched && !producer_id?.valid">
+        <div *ngIf="producer_id?.errors?.required">CompanyId needs to be entered</div>
+        <div *ngIf="producer_id?.errors?.cannotContainSpace">CompanyId cannot contain space</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+          (click)="dismiss(producer_id)"></button>
+      </div>
+
+      <div class="row">
+        <div class="col"></div>
+        <div class="col">
+          <button class="btn btn-primary" (click)="postProducer()" [disabled]="!form.valid"> Submit </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-danger" (click)="resetFields()"> Clear </button>
+        </div>
+        <div class="col"></div>
+      </div>
+    </form>
+  </div>
+  <div class="col"></div>
+</div>

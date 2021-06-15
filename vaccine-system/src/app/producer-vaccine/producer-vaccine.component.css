@@ -1,0 +1,51 @@
+h1{
+    font-weight: 400;
+}
+
+h5 {
+    letter-spacing: 1.5px;
+    font-weight: lighter;
+    margin-top: -5px;
+}
+
+#vaccines{
+    margin-top: 1%;
+    overflow-y: scroll;
+    height: 200px;
+}
+
+#add-update{
+    padding: 20px
+}
+
+table{
+    margin-bottom: 30px;
+}
+
+label {
+    float: left;
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+label[for="name"]{
+    margin-top: 20px;
+}
+
+input {
+    margin-bottom: 30px;
+}
+
+#vaccine-name{
+    text-transform: uppercase;
+}
+
+form .btn {
+    width: 120px;
+    font-size: larger;
+    margin-bottom: 30px;
+}
+
+div[role='alert'] {
+    margin-top: -26px;
+}
