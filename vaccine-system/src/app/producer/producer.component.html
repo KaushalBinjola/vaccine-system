@@ -9,24 +9,26 @@
 
       <div>
         <label for="username">Producer Name</label>
-        <input type="text" class="form-control" id="username" formControlName='producer_name'>
+        <input type="text" class="form-control" id="username" formControlName='producer_name' (focusout)='checkName()'>
       </div>
       <div class="alert alert-danger alert-dismissible fade show" role="alert"
         *ngIf="producer_name?.touched && !producer_name?.valid">
         <div *ngIf="producer_name?.errors?.required">Name needs to be entered</div>
         <div *ngIf="producer_name?.errors?.cannotContainSpace">Name cannot contain space</div>
+        <div *ngIf="producer_name?.errors?.nameTaken">This name is taken</div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
           (click)="dismiss(producer_name)"></button>
       </div>
 
       <div>
         <label for="email">Producer Email</label>
-        <input type="text" class="form-control" id="email" formControlName="producer_email">
+        <input type="text" class="form-control" id="email" formControlName="producer_email" (focusout)='checkEmail()'>
       </div>
       <div class="alert alert-danger alert-dismissible fade show" role="alert"
         *ngIf="producer_email?.touched && !producer_email?.valid">
         <div *ngIf="producer_email?.errors?.required">EmailId needs to be entered</div>
         <div *ngIf="producer_email?.errors?.email">Please enter valid EmailId</div>
+        <div *ngIf="producer_email?.errors?.emailTaken">This email is taken</div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
           (click)="dismiss(producer_email)"></button>
       </div>
@@ -66,6 +68,18 @@
         <div class="col"></div>
       </div>
     </form>
+    <div class="row container">
+      <div class="col">
+        <a routerLink="/" style="text-decoration: none; cursor: pointer;">To Home
+        </a>
+      </div>
+      <div class="col-1"></div>
+      <div class="col">
+        <a routerLink="/signupConsumer" style="text-decoration: none; cursor: pointer;">Not a Producer? SignUp
+          here
+        </a>
+      </div>
+    </div>
   </div>
   <div class="col"></div>
 </div>

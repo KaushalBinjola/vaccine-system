@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { CrudService } from '../crud.service';
 import { SignupValidators } from '../signup.validators';
@@ -13,7 +13,7 @@ import { SignupValidators } from '../signup.validators';
 })
 
 export class ProducerComponent implements OnInit {
-  producers: any
+  
   readonly baseUrl = "http://localhost:3000/producer/"
 
   form = new FormGroup({
@@ -35,24 +35,54 @@ export class ProducerComponent implements OnInit {
     ])
   })
 
-  constructor(private producerService: CrudService) { }
+  constructor(private producerService: CrudService, private router:Router) { }
 
   ngOnInit() {
-    this.producerService.get(this.baseUrl)
-      .subscribe(response => {
-        this.producers = response
-      })
-
-
+    this.form.get('producer_name')?.setErrors({
+      nameTaken: false
+    }
+    )
   }
 
   postProducer() {
     this.producerService.post(this.baseUrl, this.form.value)
       .subscribe((res) => {
+        this.router.navigate(['/'])
         this.form.reset()
         console.log(` Added ${res} `)
       });
+
+    
   }
+
+  checkName() {
+    let producerName = this.form.value['producer_name']
+    this.producerService.get(`${this.baseUrl}/${producerName}`)
+      .subscribe(res => {
+        let producer: any = res
+        if (producer.length != 0) {
+          this.form.get('producer_name')?.setErrors({
+            nameTaken: true
+          }
+          )
+        }
+      })
+  }
+
+  checkEmail() {
+    let producerEmail = this.form.value['producer_email']
+    this.producerService.get(`${this.baseUrl}/email/${producerEmail}`)
+      .subscribe(res => {
+        let producer: any = res
+        if (producer.length != 0) {
+          this.form.get('producer_email')?.setErrors({
+            emailTaken: true
+          }
+          )
+        }
+      })
+  }
+
 
   resetFields() {
     this.form.reset()

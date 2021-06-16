@@ -1,12 +1,17 @@
 #form-container {
-    margin-top: 7%;
+    margin-top: 2%;
     border-radius: 15px;
     background: #ffffff;
     box-shadow: 9px 9px 18px #666666, -9px -9px 18px #ffffff;
+    margin-bottom: 30px;
 }
 
 form {
     padding: 15px;
+}
+
+#city{
+    text-transform: uppercase;
 }
 
 h5 {

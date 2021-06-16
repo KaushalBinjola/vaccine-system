@@ -1,0 +1,110 @@
+<div class="row">
+    <div class="col"></div>
+    <div class="col text-center" id="form-container">
+        &nbsp;
+        <h1>Consumer SignUp</h1>
+        <h5>You are contributing to a <br> <b>Healthy Tomorrow</b></h5>
+        <form [formGroup]='form'>
+            <br>
+
+            <div>
+                <label for="username">Consumer Name</label>
+                <input type="text" class="form-control" id="username" formControlName='consumer_name'>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="consumer_name?.touched && !consumer_name?.valid">
+                <div *ngIf="consumer_name?.errors?.required">Name needs to be entered</div>
+                <div *ngIf="consumer_name?.errors?.cannotContainSpace">Name cannot contain space</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(consumer_name)"></button>
+            </div>
+
+            <div>
+                <label for="email">Consumer Email</label>
+                <input type="text" class="form-control" id="email" formControlName="consumer_email"
+                    (focusout)='checkEmail()'>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="consumer_email?.touched && !consumer_email?.valid">
+                <div *ngIf="consumer_email?.errors?.emailTaken">This email is taken</div>
+                <div *ngIf="consumer_email?.errors?.required">Email needs to be entered</div>
+                <div *ngIf="consumer_email?.errors?.email">Please enter valid email</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(consumer_email)"></button>
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" formControlName="password">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="password?.touched && !password?.valid">
+                <div *ngIf="password?.errors?.required">Password needs to be entered</div>
+                <div *ngIf="password?.errors?.minLength">Password should be at least 8 letters </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(password)"></button>
+            </div>
+
+            <div>
+                <label for="city">City Name</label>
+                <input type="text" class="form-control" id="city" formControlName="city_name">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="city_name?.touched && !city_name?.valid">
+                <div *ngIf="city_name?.errors?.required">City Name needs to be entered</div>
+                <div *ngIf="city_name?.errors?.pattern">City Name shouldn't have numbers</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(city_name)"></button>
+            </div>
+
+            <div>
+                <label for="age">Age</label>
+                <input type="number" class="form-control" id="age" formControlName="age">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="age?.touched && !age?.valid">
+                <div *ngIf="age?.errors?.required">Age needs to be entered</div>
+                <div *ngIf="age?.errors?.cannotBeNegative">Age cannot be negative</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(age)"></button>
+            </div>
+
+            <div>
+                <label for="phone-number">Phone Number</label>
+                <input type="number" class="form-control" id="phone-number" formControlName="phone_number">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="phone_number?.touched && !phone_number?.valid">
+                <div *ngIf="phone_number?.errors?.required">Phone Number needs to be entered</div>
+                <div *ngIf="phone_number?.errors?.cannotBeNegative">Phone Number cannot be negative</div>
+                <div *ngIf="phone_number?.errors?.minLength()">Phone Number needs to be 10 characters</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(phone_number)"></button>
+            </div>
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <button class="btn btn-primary" (click)="postConsumer()" [disabled]="!form.valid"> Submit </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-danger" (click)="resetFields()"> Clear </button>
+                </div>
+                <div class="col"></div>
+            </div>
+        </form>
+        <div class="row container">
+            <div class="col">
+                <a routerLink="/" style="text-decoration: none; cursor: pointer;">To Home
+                </a>
+            </div>
+            <div class="col-1"></div>
+            <div class="col">
+                <a routerLink="/signupProducer" style="text-decoration: none; cursor: pointer;">Not a Consumer? SignUp
+                    here
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

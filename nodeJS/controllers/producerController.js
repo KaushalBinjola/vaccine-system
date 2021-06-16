@@ -17,6 +17,40 @@ router.get('/', (req, res) => {
     })
 })
 
+//getting according to particular name
+router.get('/:name', (req, res) => {
+    Producer.find({ producer_name: req.params.name }, (err, doc) => {
+        if (!err) {
+            if (doc.length == 0) {
+                return res.status(400).send(`No document with name: ${req.params.name} found!`)
+            }
+            else {
+                console.log(res.send(doc))
+            }
+        }
+        else {
+            console.log(`Error in retrieving Producer of name : ${JSON.stringify(err, undefined, 2)}`)
+        }
+    })
+})
+
+// get according to email
+router.get('/email/:email', (req, res) => {
+    Producer.find({ producer_email: req.params.email }, (err, doc) => {
+        if (!err) {
+            if (doc.length == 0) {
+                return res.status(400).send(`No document with name: ${req.params.name} found!`)
+            }
+            else {
+                console.log(res.send(doc))
+            }
+        }
+        else {
+            console.log(`Error in retrieving Producer of name : ${JSON.stringify(err, undefined, 2)}`)
+        }
+    })
+})
+
 //posting info
 router.post('/', (req, res) => {
     var producer = new Producer({
@@ -36,22 +70,6 @@ router.post('/', (req, res) => {
 })
 
 
-//getting according to particular name
-router.get('/:name', (req, res) => {
-    Producer.find({ producer_name: req.params.name }, (err, doc) => {
-        if (!err) {
-            if (doc.length == 0) {
-                return res.status(400).send(`No document with name: ${req.params.name} found!`)
-            }
-            else {
-                console.log(res.send(doc))
-            }
-        }
-        else {
-            console.log(`Error in retrieving Producer of name : ${JSON.stringify(err, undefined, 2)}`)
-        }
-    })
-})
 
 
 //update according to name

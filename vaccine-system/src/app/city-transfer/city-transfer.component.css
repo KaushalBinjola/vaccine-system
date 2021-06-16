@@ -1,0 +1,35 @@
+h1{
+    font-weight: 400;
+}
+
+h5 {
+    letter-spacing: 1.5px;
+    font-weight: lighter;
+    margin-top: -5px;
+}
+
+#tag{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    font-size: 30px;
+    font-weight: lighter;
+}
+
+#table-container{
+    overflow-y: scroll;
+    height: 170px;
+}
+
+label{
+    font-size: 20px;
+}
+
+#city{
+    text-transform: uppercase;
+}
+
+div[role="alert"]{
+    margin-top: 5px;
+}

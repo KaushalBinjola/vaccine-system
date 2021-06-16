@@ -10,21 +10,35 @@ import { CrudService } from './crud.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ProducerVaccineComponent } from './producer-vaccine/producer-vaccine.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { CityTransferComponent } from './city-transfer/city-transfer.component';
+import { ConsumerComponent } from './consumer/consumer.component';
+import { ConsumerVaccineComponent } from './consumer-vaccine/consumer-vaccine.component';
+import { CartComponent } from './cart/cart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProducerComponent,
     HomeComponent,
-    ProducerVaccineComponent
+    ProducerVaccineComponent,
+    NavbarComponent,
+    CityTransferComponent,
+    ConsumerComponent,
+    ConsumerVaccineComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot([
       {path:'', component:HomeComponent},
-      {path:'signup', component:ProducerComponent},
-      {path:'vaccine/:name', component:ProducerVaccineComponent}
+      {path:'signupProducer', component:ProducerComponent},
+      {path:'signupConsumer',component:ConsumerComponent},
+      {path:'vaccine/:name', component:ProducerVaccineComponent},
+      {path:'consumer/:email',component:ConsumerVaccineComponent},
+      {path: 'cities', component:CityTransferComponent},
+      {path: 'cart/:email', component:CartComponent},
     ]),
     ReactiveFormsModule,
     HttpClientModule,
@@ -32,4 +46,5 @@ import { ProducerVaccineComponent } from './producer-vaccine/producer-vaccine.co
   providers: [CrudService],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
