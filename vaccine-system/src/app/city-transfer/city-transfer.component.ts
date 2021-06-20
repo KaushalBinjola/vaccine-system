@@ -2,41 +2,56 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../crud.service';
 import { VaccineValidators } from '../vaccine.validation';
+import * as Highcharts from 'highcharts'
+import { JwtHelperService } from '@auth0/angular-jwt';
+
 
 @Component({
   selector: 'app-city-transfer',
   templateUrl: './city-transfer.component.html',
   styleUrls: ['./city-transfer.component.css']
 })
+
+
 export class CityTransferComponent implements OnInit {
+  Highcharts: typeof Highcharts = Highcharts;
+
   cities: any
   name: string = ""
   producerVaccines: any
+  chartVaccineNames: string[] = []
+  chartStock: number[] = []
+  decodedToken: any
 
   producerUrl = "http://localhost:3000/vaccine"
   cityUrl = "http://localhost:3000/city"
 
   form = new FormGroup({
-    _id: new FormControl("",[
+    _id: new FormControl("", [
       Validators.required
     ]),
     producer_name: new FormControl(),
     vaccine_name: new FormControl(),
-    stock: new FormControl("",[
+    stock: new FormControl("", [
       Validators.required,
       VaccineValidators.cannotBeNegative
     ]),
     expiry_date: new FormControl(),
-    city_name: new FormControl("",[
+    city_name: new FormControl("", [
       Validators.required,
       Validators.pattern(/^([^0-9]*)$/)
     ]),
   })
 
+  chartOptions: any
+
   constructor(private cityService: CrudService) { }
 
   ngOnInit(): void {
-    this.name = "Kaushal"
+    if (localStorage.getItem('token')) {
+      this.decodedToken = this.cityService.token()
+    }
+    this.name = this.decodedToken.name
 
     this.getCities()
     this.getProducer()
@@ -53,6 +68,13 @@ export class CityTransferComponent implements OnInit {
     this.cityService.get(this.producerUrl + '/' + this.name)
       .subscribe(res => {
         this.producerVaccines = res
+        for (let i of this.producerVaccines) {
+          this.chartVaccineNames.push(i['vaccine_name'])
+          this.chartStock.push(i['stock'])
+        }
+        console.log(this.chartVaccineNames)
+        console.log(this.chartStock)
+        this.makeChart()
       })
   }
 
@@ -130,11 +152,11 @@ export class CityTransferComponent implements OnInit {
   }
 
 
-  get city_name(){
+  get city_name() {
     return this.form.get('city_name')
   }
 
-  get stock(){
+  get stock() {
     return this.form.get('stock')
   }
 
@@ -142,13 +164,46 @@ export class CityTransferComponent implements OnInit {
     this.form.reset()
   }
 
-  dismiss(v:any){
+  dismiss(v: any) {
     v.touched = false
   }
 
-  formOk(){
+  formOk() {
     this.form.setErrors({
-      insufficientStock:false
+      insufficientStock: false
     })
   }
+
+  makeChart() {
+    this.chartOptions = {
+      title: {
+        text: 'Producer Information'
+      },
+
+      yAxis: {
+        title: {
+          text: 'Stocks Present'
+        }
+      },
+
+      xAxis: {
+        title: {
+          text: 'Vaccine Name'
+        },
+        categories: this.chartVaccineNames,
+        accessibility: {
+          rangeDescription: "Vaccine Names",
+        }
+      },
+
+      series: [
+        {
+          type: "line",
+          name: "vaccines",
+          data: this.chartStock
+        }
+      ]
+    };
+  }
+
 }

@@ -1,7 +1,7 @@
 import { JsonpClientBackend } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CrudService } from '../crud.service';
 import { ProducerVaccine } from '../shared/producer-vaccine.model';
 import { VaccineValidators } from '../vaccine.validation';
@@ -16,6 +16,7 @@ export class ProducerVaccineComponent implements OnInit {
   name?: string
   vaccines?: any
   readonly baseUrl = "http://localhost:3000/vaccine"
+  decodedToken: any
 
   form = new FormGroup({
     producer_name: new FormControl(),
@@ -33,9 +34,7 @@ export class ProducerVaccineComponent implements OnInit {
   })
 
   formUpdate = new FormGroup({
-    _id: new FormControl("", [
-      Validators.required
-    ]),
+    _id: new FormControl(),
     producer_name: new FormControl(),
     vaccine_name: new FormControl("", [
       Validators.required
@@ -51,17 +50,15 @@ export class ProducerVaccineComponent implements OnInit {
   })
 
 
-  constructor(private route: ActivatedRoute, private vaccineService: CrudService) {
+  constructor(private router: Router, private vaccineService: CrudService) {
   }
 
 
-
   ngOnInit(): void {
-    this.route.paramMap
-      .subscribe(params => {
-        this.name = params.get('name') as string
-      })
-
+    if (localStorage.getItem('token')) {
+      this.decodedToken = this.vaccineService.token()
+    }
+    this.name = this.decodedToken.name
     this.getVaccine()
   }
 
@@ -71,6 +68,10 @@ export class ProducerVaccineComponent implements OnInit {
       .subscribe(response => {
         this.vaccines = response
       })
+  }
+
+  addVaccine() {
+    this.router.navigate(['/vaccine/add'])
   }
 
   postVaccine() {
@@ -128,13 +129,7 @@ export class ProducerVaccineComponent implements OnInit {
   }
 
   editVaccine(v: any) {
-    this.formUpdate.setValue({
-      _id: v['_id'],
-      producer_name: v['producer_name'],
-      vaccine_name: v['vaccine_name'],
-      stock: v['stock'],
-      expiry_date: v['expiry_date'].slice(0, 10)
-    })
+    this.router.navigate(['/vaccine/update/',v['_id']])
   }
 
   resetFields() {

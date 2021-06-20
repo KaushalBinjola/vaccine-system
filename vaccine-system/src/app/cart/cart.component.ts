@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../crud.service';
+import { VaccineValidators } from '../vaccine.validation';
 
 @Component({
   selector: 'app-cart',
@@ -9,39 +10,41 @@ import { CrudService } from '../crud.service';
 })
 export class CartComponent implements OnInit {
 
-  consumer: any
   name: string = ""
   consumerEmail: string = ""
   cartItems: any
+  decodedToken: any
 
   readonly consumerUrl = "http://localhost:3000/consumer"
   readonly cartUrl = "http://localhost:3000/cart"
 
   form = new FormGroup({
-    _id: new FormControl(),
+    _id: new FormControl("", [
+      Validators.required
+    ]),
     consumer_email: new FormControl(),
     vaccine_name: new FormControl(),
     stock: new FormControl(),
     original_return: new FormControl(),
-    return: new FormControl(),
+    return: new FormControl("", [
+      Validators.required,
+      VaccineValidators.cannotBeNegative
+    ]),
     original_returnReason: new FormControl(),
-    return_reason: new FormControl()
+    return_reason: new FormControl("", [
+      Validators.required,
+    ])
   })
 
   constructor(private cartService: CrudService) { }
 
   ngOnInit(): void {
-    this.name = "Kaushal"
-    this.getCartItems()
-  }
-
-  getCartItems() {
-    this.cartService.get(`${this.consumerUrl}/${this.name}`)
-      .subscribe(res => {
-        this.consumer = res
-        this.consumerEmail = this.consumer[0]['consumer_email']
-        this.getCart()
-      })
+    if (localStorage.getItem('token')) {
+      this.decodedToken = this.cartService.token()
+    }
+    this.name = this.decodedToken.name
+    this.consumerEmail = this.decodedToken.email
+    this.getCart()
   }
 
   getCart() {
@@ -85,7 +88,7 @@ export class CartComponent implements OnInit {
     }
   }
 
-  deleteVaccine(vac:any) {
+  deleteVaccine(vac: any) {
     let id = vac._id
     this.cartService.delete(`${this.cartUrl}/${id}`)
       .subscribe(res =>
@@ -127,5 +130,15 @@ export class CartComponent implements OnInit {
 
   resetFields() {
     this.form.reset()
+  }
+
+  formOk() {
+    this.form.setErrors({
+      insufficientStock: false
+    })
+  }
+
+  dismiss(v: any) {
+    v.touched = false
   }
 }

@@ -15,6 +15,14 @@ import { CityTransferComponent } from './city-transfer/city-transfer.component';
 import { ConsumerComponent } from './consumer/consumer.component';
 import { ConsumerVaccineComponent } from './consumer-vaccine/consumer-vaccine.component';
 import { CartComponent } from './cart/cart.component';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { LoginComponent } from './login/login.component';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { AddUpdateProducerVaccineComponent } from './add-update-producer-vaccine/add-update-producer-vaccine.component';
+import { AuthGuard } from './auth-guard.service';
+import { ProducerAuth } from './admin-auth.service';
+import { ConsumerAuth } from './notadmin-auth.service';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +34,9 @@ import { CartComponent } from './cart/cart.component';
     CityTransferComponent,
     ConsumerComponent,
     ConsumerVaccineComponent,
-    CartComponent
+    CartComponent,
+    LoginComponent,
+    AddUpdateProducerVaccineComponent
   ],
   imports: [
     BrowserModule,
@@ -35,15 +45,19 @@ import { CartComponent } from './cart/cart.component';
       {path:'', component:HomeComponent},
       {path:'signupProducer', component:ProducerComponent},
       {path:'signupConsumer',component:ConsumerComponent},
-      {path:'vaccine/:name', component:ProducerVaccineComponent},
-      {path:'consumer/:email',component:ConsumerVaccineComponent},
-      {path: 'cities', component:CityTransferComponent},
-      {path: 'cart/:email', component:CartComponent},
+      {path:'vaccine/add', component:AddUpdateProducerVaccineComponent, canActivate:[AuthGuard,ProducerAuth]},  
+      {path:'vaccine/update/:id', component:AddUpdateProducerVaccineComponent, canActivate:[AuthGuard,ProducerAuth]},
+      {path:'vaccine/:name', component:ProducerVaccineComponent, canActivate:[AuthGuard,ProducerAuth]},
+      {path:'consumer/:email',component:ConsumerVaccineComponent, canActivate:[AuthGuard,ConsumerAuth]},
+      {path: 'cities', component:CityTransferComponent, canActivate:[AuthGuard,ProducerAuth]},
+      {path: 'cart/:email', component:CartComponent, canActivate:[AuthGuard,ConsumerAuth]},
+      {path: 'login', component:LoginComponent},
     ]),
     ReactiveFormsModule,
     HttpClientModule,
+    HighchartsChartModule,
   ],
-  providers: [CrudService],
+  providers: [CrudService,JwtHelperService,AuthGuard,ProducerAuth,ConsumerAuth],
   bootstrap: [AppComponent]
 })
 

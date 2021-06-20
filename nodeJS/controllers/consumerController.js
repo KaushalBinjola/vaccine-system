@@ -1,4 +1,5 @@
 const express = require('express')
+const jwt = require('jsonwebtoken')
 var router = express.Router()
 // var ObjectId = require('mongoose').Types.ObjectId
 
@@ -29,9 +30,9 @@ router.get('/:name', (req, res) => {
     })
 })
 
-// name.getting according to email
+// getting according to email
 router.get('/email/:email', (req, res) => {
-    Consumer.find({ consumer_email: req.params.email}, (err, docs) => {
+    Consumer.find({ consumer_email: req.params.email }, (err, docs) => {
         if (!err) {
             res.send(docs)
         }
@@ -40,6 +41,30 @@ router.get('/email/:email', (req, res) => {
         }
     })
 })
+
+//for login 
+router.get('/login/:email/:password', (req, res) => {
+    Consumer.find({ consumer_email: req.params.email, password: req.params.password }, (err, docs) => {
+        if (!err) {
+            res.send(docs)
+        }
+        else {
+            console.log(`Error in retrieving Producer : ${JSON.stringify(err, undefined, 2)}`)
+        }
+    })
+})
+
+// jwt token
+router.get('/token/:email/:name', (req, res) => {
+    tokenDetails = {
+        name:req.params.name,
+        email:req.params.email,
+        admin: false
+    }
+    token = jwt.sign(tokenDetails, 'hellothisismyname')
+    res.send(JSON.stringify(token))
+})
+
 
 // posting info
 router.post('/', (req, res) => {

@@ -3,7 +3,7 @@
     <h1>Cart</h1>
     <h5>Hello {{ name }}, Here are your Vaccines </h5>
 </div>
-
+<!-- 
 <div class="row" id="display-all">
     <div class="col-2" id="tag"> Your Cart : </div>
     <div class="col" id="table-container">
@@ -39,14 +39,15 @@
                                 <path fill-rule="evenodd"
                                     d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z">
                                 </path>
-                            </svg></button>
+                            </svg>
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div class="col-2"></div>
-</div>
+</div> -->
 
 <div class="m-5">
     <form class="text-center" [formGroup]="form">
@@ -67,15 +68,29 @@
                 <input type="number" class="form-control" id="stock" formControlName="stock" readonly>
             </div>
 
+
             <div class="col">
                 <label for="return">Return</label>
                 <input type="number" class="form-control" id="return" formControlName="return">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                    *ngIf="return?.touched && !return?.valid">
+                    <div *ngIf="return?.errors?.required">Return needs to be entered</div>
+                    <div *ngIf="return?.errors?.cannotBeNegative">Return cannot be negative</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        (click)="dismiss(return)"></button>
+                </div>
             </div>
 
 
             <div class="col">
                 <label for="return">Return Reason</label>
                 <input type="text" class="form-control" id="return-reason" formControlName="return_reason">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                    *ngIf="return_reason?.touched && !return_reason?.valid">
+                    <div *ngIf="return_reason?.errors?.required">Return Reason needs to be entered</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        (click)="dismiss(return_reason)"></button>
+                </div>
             </div>
 
         </div>
@@ -90,12 +105,59 @@
         <div class="container">
             <div class="alert alert-danger alert-dismissible fade show" role="alert"
                 *ngIf="form?.errors?.insufficientStock">
-                <div>You don't have enough stock to transfer</div>
+                <div>You don't have enough stock to return</div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
                     (click)="formOk()"></button>
             </div>
         </div>
-        <p> {{ form.value | json}}</p>
     </form>
 
+</div>
+
+<div id="vaccine-cards" class="row my-5">
+    <div class="col-3 card-container" *ngFor="let item of cartItems;">
+        <label>
+            <input type="checkbox" />
+            <div class="flip-card">
+                <div class="front">
+                    <br>
+                    <h6>Vaccine Name :</h6>
+                    <h3>{{ item.vaccine_name }}</h3>
+                    <h6>Email : </h6>
+                    <h3>{{ item.consumer_email }}</h3>
+                    <h6>Stock :</h6>
+                    <h3>{{ item.stock }}</h3>
+                    <h6>Returned :</h6>
+                    <h3>{{ item.return}}</h3>
+                    <hr>
+                    <p>Click to Flip</p>
+                </div>
+                <div class="back">
+                    <br>
+                    <h6>Return Reasons :</h6>
+                    <h3>{{ item.return_reason}}</h3>
+                    <hr>
+                    <h6> Return : </h6>
+                    <button class="btn btn-primary btn-sm" (click)="setForm(item)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                            <path fill-rule="evenodd"
+                                d="M6.78 1.97a.75.75 0 010 1.06L3.81 6h6.44A4.75 4.75 0 0115 10.75v2.5a.75.75 0 01-1.5 0v-2.5a3.25 3.25 0 00-3.25-3.25H3.81l2.97 2.97a.75.75 0 11-1.06 1.06L1.47 7.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0z">
+                            </path>
+                        </svg>
+                    </button>
+                    <hr>
+                    <h6> Delete : </h6>
+                    <button class="btn btn-danger btn-sm" (click)="deleteVaccine(item)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                            <path fill-rule="evenodd"
+                                d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z">
+                            </path>
+                        </svg>
+                    </button>
+                    <hr>
+                    <p class="click">Click to Flip</p>
+                </div>
+            </div>
+        </label>
+    </div>
 </div>

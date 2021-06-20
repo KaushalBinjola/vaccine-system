@@ -22,3 +22,86 @@ h5 {
     height: 170px;
 }
     
+
+
+#vaccine-cards label {
+    display: block;
+    margin-bottom: 35px;
+    width: 280px;
+    height: 350px;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.flip-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+}
+
+.flip-card .front, .flip-card .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    background: #FFF5FD;
+    box-shadow: 5px 5px 10px #747474, -5px -5px 10px #ffffff;
+}
+
+.flip-card .back {
+    transform: rotateX(180deg);
+    color: #000;
+}
+
+#vaccine-cards label:hover .flip-card {
+    transform: rotateX(2deg);
+}
+
+#vaccine-cards input {
+    display: none;
+}
+
+:checked+.flip-card {
+    transform: rotateX(180deg);
+}
+
+#vaccine-cards label:hover :checked+.flip-card {
+    transform: rotateX(175deg);
+}
+
+.flip-card hr {
+    width: 150px;
+    margin-left: 70px;
+}
+
+.front h3, .back h3 {
+    color: #005A8D;
+}
+
+.flip-card h6 {
+    font-size: 15px;
+}
+
+.card-container {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.flip-card p {
+    color: #022E57;
+}
+
+
+.back .btn{
+    width: 200px;
+    height: 40px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}

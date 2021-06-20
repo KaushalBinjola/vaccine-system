@@ -1,0 +1,78 @@
+<div class="container text-center header">
+    <h1>India Vaccines</h1>
+    <h5>Glad to see you back!</h5>
+</div>
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col text-center" id="form-container">
+        &nbsp;
+        <h1>Login</h1>
+        <form [formGroup]='form'>
+            <br>
+
+            <div>
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" formControlName="email">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="email?.touched && !email?.valid">
+                <div *ngIf="email?.errors?.required">EmailId needs to be entered</div>
+                <div *ngIf="email?.errors?.email">Please enter valid EmailId</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(email)"></button>
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" formControlName="password">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="password?.touched && !password?.valid">
+                <div *ngIf="password?.errors?.required">Password needs to be entered</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(password)"></button>
+            </div>
+
+            <div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" id="producer-check" formControlName="isProducer" value="true"
+                                aria-label="Radio button for following text input">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Are you a producer?" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <button class="btn btn-primary" (click)="login()" [disabled]="!form.valid"> Login </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-danger" (click)="resetFields()"> Clear </button>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="invalidDetails"
+                *ngIf="form?.errors?.invalidLogin">
+                <div>Invalid Details</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="formOk()"></button>
+            </div>
+        </form>
+        <div class="row container">
+            <div class="col">
+                <a routerLink="/" style="text-decoration: none; cursor: pointer;">To Home
+                </a>
+            </div>
+            <div class="col">
+                <a routerLink="/signupProducer" style="text-decoration: none; cursor: pointer;">Sign Up?
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../crud.service';
+import { VaccineValidators } from '../vaccine.validation';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-consumer-vaccine',
@@ -13,14 +15,20 @@ export class ConsumerVaccineComponent implements OnInit {
   city: string = ""
   cities: any
   consumerEmail: string = ""
+  decodedToken: any
 
 
   form = new FormGroup({
-    _id: new FormControl(),
+    _id: new FormControl("", [
+      Validators.required
+    ]),
     original_stock: new FormControl(),
     consumer_email: new FormControl(),
     vaccine_name: new FormControl(),
-    stock: new FormControl(),
+    stock: new FormControl("", [
+      Validators.required,
+      VaccineValidators.cannotBeNegative
+    ]),
   })
 
   readonly consumerUrl = "http://localhost:3000/consumer"
@@ -32,16 +40,19 @@ export class ConsumerVaccineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.name = "Kaushal"
+    if (localStorage.getItem('token')) {
+      this.decodedToken = this.consumerService.token()
+    }
+    this.consumerEmail = this.decodedToken.email
+    this.name = this.decodedToken.name
     this.getCityName()
   }
 
   getCityName() {
-    this.consumerService.get(`${this.consumerUrl}/${this.name}`)
+    this.consumerService.get(`${this.consumerUrl}/email/${this.consumerEmail}`)
       .subscribe(res => {
         this.consumer = res
         this.city = this.consumer[0]['city_name']
-        this.consumerEmail = this.consumer[0]['consumer_email']
         this.getCities()
       })
   }
@@ -63,15 +74,15 @@ export class ConsumerVaccineComponent implements OnInit {
   }
 
 
-  buyVaccine(){
-    if(this.stock?.value>this.original_stock?.value){
+  buyVaccine() {
+    if (this.stock?.value > this.original_stock?.value) {
       this.form.setErrors({
-        insufficientStock:true
+        insufficientStock: true
       })
     }
-    else{
+    else {
       let vaccine = {
-        consumer_email : this.consumerEmail,
+        consumer_email: this.consumerEmail,
         vaccine_name: this.vaccine_name?.value,
         stock: this.stock?.value,
         return: 0,
@@ -80,45 +91,55 @@ export class ConsumerVaccineComponent implements OnInit {
 
       let leftStock = this.original_stock?.value - this.stock?.value
 
-      this.consumerService.post(this.cartUrl,vaccine)
-      .subscribe(res=>{
-        console.log(res)
-      })
+      this.consumerService.post(this.cartUrl, vaccine)
+        .subscribe(res => {
+          console.log(res)
+        })
 
       let city = {
-        city_name:this.city,
+        city_name: this.city,
         vaccine_name: this.vaccine_name?.value,
-        stock: leftStock 
+        stock: leftStock
       }
 
-      this.consumerService.put(`${this.cityUrl}/${this._id?.value}`,city)
-      .subscribe(res=>{
-        console.log(res)
-        this.ngOnInit()
-        this.form.reset()
-      })
+      this.consumerService.put(`${this.cityUrl}/${this._id?.value}`, city)
+        .subscribe(res => {
+          console.log(res)
+          this.ngOnInit()
+          this.form.reset()
+        })
     }
   }
 
 
-  get _id(){
+  get _id() {
     return this.form.get('_id')
   }
 
-  get original_stock(){
+  get original_stock() {
     return this.form.get('original_stock')
   }
 
-  get vaccine_name(){
+  get vaccine_name() {
     return this.form.get('vaccine_name')
   }
 
-  get stock(){
+  get stock() {
     return this.form.get('stock')
   }
 
-  resetFields(){
+  resetFields() {
     this.form.reset()
+  }
+
+  dismiss(v: any) {
+    v.touched = false
+  }
+
+  formOk() {
+    this.form.setErrors({
+      insufficientStock: false
+    })
   }
 
 }

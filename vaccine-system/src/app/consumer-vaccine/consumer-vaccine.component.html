@@ -3,7 +3,7 @@
     <h1>Vaccine Shop</h1>
     <h5>Hello {{ name }}, Happy Shopping! </h5>
 </div>
-<div class="row" id="display-all">
+<!-- <div class="row" id="display-all">
     <div class="col-2" id="tag"> Cities Stats: </div>
     <div class="col" id="table-container">
         <table class="table text-center">
@@ -36,16 +36,14 @@
         </table>
     </div>
     <div class="col-2"></div>
-</div>
+</div> -->
 
-<br><br>
-
-<div class="m-5">
+<div>
     <form class="text-center" [formGroup]="form">
         <div class="row">
             <div class="col"></div>
-            <input type="text" class="form-control" id="_id" formControlName="_id" readonly hidden>
-            <input type="text" class="form-control" id="original-stock" formControlName="original_stock" readonly hidden>
+            <!-- <input type="text" class="form-control" id="original-stock" formControlName="original_stock" readonly
+                hidden> -->
             <div class="col">
                 <label for="consumer-email">Consumer Email</label>
                 <input type="text" class="form-control" id="consumer-email" formControlName="consumer_email" readonly>
@@ -57,13 +55,13 @@
             <div class="col">
                 <label for="stock">Stock</label>
                 <input type="number" class="form-control" id="stock" formControlName="stock">
-                <!-- <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"
                     *ngIf="stock?.touched && !stock?.valid">
                     <div *ngIf="stock?.errors?.required">Stock needs to be entered</div>
                     <div *ngIf="stock?.errors?.cannotBeNegative">Stock cannot be negative</div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
                         (click)="dismiss(stock)"></button>
-                </div> -->
+                </div>
             </div>
             <div class="col"></div>
 
@@ -76,14 +74,55 @@
             <button class="btn btn-warning col-1" (click)="resetFields()">Reset</button>
             <div class="col"></div>
         </div>
-        <!-- <div class="container">
+        <div class="container">
             <div class="alert alert-danger alert-dismissible fade show" role="alert"
                 *ngIf="form?.errors?.insufficientStock">
-                <div>You don't have enough stock to transfer</div>
+                <div>City doesn't have enough stock to transfer</div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
                     (click)="formOk()"></button>
             </div>
-        </div> -->
+        </div>
     </form>
 
+</div>
+
+<div id="vaccine-cards" class="row my-5">
+    <div class="col-3 card-container" *ngFor="let city of cities;">
+        <label>
+            <input type="checkbox" />
+            <div class="flip-card">
+                <div class="front">
+                    <br>
+                    <h6>Vaccine Name : </h6>
+                    <h3>{{ city.vaccine_name }}</h3>
+                    <br>
+                    <h6>City :</h6>
+                    <h3>{{ city.city_name }}</h3>
+                    <br>
+                    <h6>Stock :</h6>
+                    <h3>{{ city.stock }}</h3>
+                    <hr>
+                    <p>Click to Flip</p>
+                </div>
+                <div class="back">
+                    <br>
+                    <h6>Vaccine Name : </h6>
+                    <h3>{{ city.vaccine_name }}</h3>
+                    <hr>
+                    <br>
+                    <h6> Update : </h6>
+                    <button class="btn btn-primary btn-sm" (click)="setForm(city)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                            <path fill-rule="evenodd"
+                                d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm.75 4.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z">
+                            </path>
+                        </svg>
+                    </button>
+                    <br><br><br>
+                    <hr>
+                    <p class="click">Click to Flip</p>
+                </div>
+            </div>
+        </label>
+    </div>
 </div>

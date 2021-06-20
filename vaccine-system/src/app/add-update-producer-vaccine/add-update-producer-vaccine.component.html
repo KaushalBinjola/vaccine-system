@@ -1,0 +1,77 @@
+<navbar></navbar>
+<div class="text-center row" id="add-update">
+    
+    <div class="col"></div>
+
+    <div class="col" id="form-container">
+        &nbsp;
+
+        <h3>Add Vaccines</h3>
+        <h5>Your addition can change India</h5>
+        <form [formGroup]="form">
+            <br>
+            <div>
+                <label for="name">Producer name</label>
+                <input type="text" class="form-control" id="producer-name" formControlName="producer_name"
+                    placeholder="{{ name }}" value="{{ name }}" readonly>
+            </div>
+
+            <div>
+                <label for="vaccine-name">Vaccine Name</label>
+                <input type="text" class="form-control" id="vaccine-name" formControlName="vaccine_name" [readonly]="!isAdd">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="vaccine_name?.touched && !vaccine_name?.valid">
+                <div *ngIf="vaccine_name?.errors?.required">Vaccine Name needs to be entered</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(vaccine_name)"></button>
+            </div>
+
+
+            <div>
+                <label for="stock">Available Stock</label>
+                <input type="number" class="form-control" id="stock" formControlName="stock">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="stock?.touched && !stock?.valid">
+                <div *ngIf="stock?.errors?.required">Stock needs to be entered</div>
+                <div *ngIf="stock?.errors?.cannotBeNegative">Stock cannot be negative</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(stock)"></button>
+            </div>
+
+            <div>
+                <label for="expiry-date">Expiry Date</label>
+                <input type="date" class="form-control" id="expiry-date" formControlName="expiry_date">
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="expiry_date?.touched && !expiry_date?.valid">
+                <div *ngIf="expiry_date?.errors?.required">Expiry Date needs to be entered</div>
+                <div *ngIf="expiry_date?.errors?.isDate">Expiry Date should be correct</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="dismiss(expiry_date)"></button>
+            </div>
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <button class="btn btn-primary" (click)="postVaccine()" [disabled]="!form.valid" *ngIf = "isAdd"> Add </button>
+                    <button class="btn btn-primary" (click)="updateVaccine()" [disabled]="!form.valid" *ngIf = "!isAdd"> Update </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-danger" (click)="resetFields()"> Clear </button>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                *ngIf="form.errors?.vaccinePresent" id="form-error">
+                <div>Vaccine is already present. Please update from list!</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                    (click)="formOk()"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col"></div>
+
+</div>
