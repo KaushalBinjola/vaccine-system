@@ -11,7 +11,7 @@ import { VaccineValidators } from '../vaccine.validation';
 })
 export class ConsumerComponent implements OnInit {
 
-  readonly baseUrl: string = "http://localhost:3000/consumer"
+  readonly baseUrl: string = "http://localhost:3000/consumer" 
 
   form = new FormGroup({
     consumer_name: new FormControl("", [
